@@ -1,0 +1,32 @@
+Simple Gallery Template Theme with Category Index.
+
+1. Create your categories and Assign a category Image for each.
+2. Create a page called channels (with no content in it just create and publish)
+3. Add the proper thumbnail sizes Under Settings -> Media
+	Thumbnail 120x160 (will be used for thumbs on a gallery)
+	Medium Size Max Width 800, Max Height 4096
+
+4. Create Menu and Assign to the Menu Location and Add Links (categories, tags, pages (channel page you created, its not needed as part of the theme but its a bonus)
+
+Three types of posts, single pic, single video, and a gallery.
+
+Gallery Posts.
+
+1. Create Post
+2. Add Media Button, Create gallery and Insert into Post.
+3. Add Category and Tags
+4. Set Featured Image (will be used as the thumb on the index)
+
+Single Image Posts.
+
+1. Create Post
+2. Add Category and Tags
+3. Set Featured Image (will be used as the thumb on the index as well as the full sized version for the post page)
+
+Single Video Posts.
+
+1. Create Post
+2. Add Category and Tags
+3. Set Featured Image (will be used on the main index)
+4. Enter video Url in the video embed box (youtube,vimeo, or an adult url from the list of 32 supported sites)
+
