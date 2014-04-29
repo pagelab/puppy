@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Add Custom attachment rewrite rules
+ * Add Custom attachment rewrite rules, and rewrite assets (js,css,images)
  *
 */
 
