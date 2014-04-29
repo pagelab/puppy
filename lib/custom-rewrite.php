@@ -1,19 +1,28 @@
 <?php
 
 /**
- * Add Custom attachment rewrite rule 
+ * Add Custom attachment rewrite rules
  *
 */
 
 function kibble_add_rewrite_rules( $wp_rewrite ) { 
+
+    	global $wp_rewrite;
 
   	$new_rules = array(
         	"^media/(\d*)/(.+)\$"  => 'index.php?attachment_id=' . $wp_rewrite->preg_index(1)
 
   	);
 
+    	$new_non_wp_rules = array(
+        	'css/(.*)'    => 'wp-content/themes/puppy/css/$1',
+        	'js/(.*)'     => 'wp-content/themes/puppy/js/$1',
+        	'images/(.*)' => 'wp-content/themes/puppy/images/$1'
+    	);
+
     	$wp_rewrite->rules = $new_rules + $wp_rewrite->rules; 
-} 
+    	$wp_rewrite->non_wp_rules = array_merge($wp_rewrite->non_wp_rules, $new_non_wp_rules);
+}
 
 add_action('generate_rewrite_rules', 'kibble_add_rewrite_rules'); 
 
@@ -22,12 +31,14 @@ add_action('generate_rewrite_rules', 'kibble_add_rewrite_rules');
  *
 */
 
-function kibble_flush_rules(){ 
-    	global $wp_rewrite; 
-    	$wp_rewrite->flush_rules(); 
-} 
+function puppy_flush_rewrite_rules() {
+	global $pagenow, $wp_rewrite;
 
-add_action('after_switch_theme','kibble_flush_rules'); 
+	if ( 'themes.php' == $pagenow && isset( $_GET['activated'] ) )
+		$wp_rewrite->flush_rules();
+}
+
+add_action( 'load-themes.php', 'puppy_flush_rewrite_rules' );
 
 /**
  * Change the default attachment link to the new one
@@ -56,5 +67,19 @@ function change_search_url_rewrite() {
 
 add_action( 'template_redirect', 'change_search_url_rewrite' );
 
+/**
+ * Change the vars which store the urls being used for css/js/images
+ *
+*/
 
+function puppy_clean_urls($content) {
+        return str_replace('/wp-content/themes/puppy', '', $content);
+}
+
+if (!is_admin()) {
+	$tags = array('bloginfo', 'stylesheet_directory_uri', 'template_directory_uri', 'script_loader_src', 'style_loader_src');
+        foreach($tags as $tag) {
+        	add_filter($tag, 'puppy_clean_urls');
+        }
+}
 
