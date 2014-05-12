@@ -10,7 +10,7 @@ Options to enable/disable comments
 
 Documentation:
 
-Screencasts coming soon
+Screencasts
 
 Support:
 

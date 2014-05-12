@@ -1,7 +1,5 @@
 <?php
 /**
- * Template Name: Category Image Index
- *
  * The template for displaying Category Images.
  *
  *

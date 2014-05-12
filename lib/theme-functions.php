@@ -152,7 +152,7 @@ function kibble_entry_content() {
 	if ( !get_post_gallery() && has_post_thumbnail() && $video == false) {
 		echo '<div class="post" align="center">';
 		$large = wp_get_attachment_url(get_post_thumbnail_id($post->ID));
-		$thumb = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'medium');
+		$thumb = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'large');
 		echo '<a href="'. $large .'"><img title="'. get_the_title($post->ID).'" src="'. $thumb[0] .'" class="img-responsive thumbnail"></a>';
 		echo '</div>';
 	}

@@ -5,9 +5,12 @@ function wp_ajax_load_posts(){
 	if(!wp_verify_nonce( $_GET['_wpnonce'], 'nonce-ajax-dropdown'))
 		die( 'Go away!' );
 
+	$year = isset($_GET['year']) ? $_GET['year'] : '';
+	$month = isset($_GET['month']) ? $_GET['month'] : '';
+
 	$args = array(
-		'year' => trim($_GET['year']),
-		'monthnum' => trim($_GET['month']),
+		'year' => trim($year),
+		'monthnum' => trim($month),
 		'posts_per_page' => -1,
 		'orderby' => 'date',
 		'cat' => trim($_GET['cat'] != "-1") ? trim($_GET['cat']) : 0,

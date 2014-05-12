@@ -35,7 +35,7 @@ function kibble_wp_query($query) {
 		$query->set('orderby', 'date');
 	 }
 
-	 if ( !$query->is_admin && $query->is_tag) {
+	 if ( !$query->is_admin && $query->is_tag || $query->is_category) {
 		$query->set('posts_per_page', -1);
 		$query->set('orderby', 'date');
 	 }

@@ -30,8 +30,14 @@ function kibble_video_box_callback( $post ) {
 */
 
 function kibble_video_save_postdata( $post_id ) {
-  	$mydata = sanitize_text_field( $_POST['kibble_video'] );
-  	update_post_meta( $post_id, '_kibble_video', $mydata );
+
+	if ( ! isset( $_POST['kibble_video'] ) ) {
+		return;
+	}
+
+	$mydata = sanitize_text_field( $_POST['kibble_video'] );
+
+	update_post_meta( $post_id, '_kibble_video', $mydata );
 }
 
 add_action( 'save_post', 'kibble_video_save_postdata' );

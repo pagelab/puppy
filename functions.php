@@ -11,14 +11,14 @@ require( get_template_directory() . '/lib/options.class.php' );
  *
 */
 
-//require( get_template_directory() . '/lib/wp-updates-theme.php' );
+require( get_template_directory() . '/lib/wp-updates-theme.php' );
 
 /**
  * Hook into the updater
  *
 */
 
-//new WPUpdatesThemeUpdater( 'http://wp-updates.com/api/1/theme', 378, basename(get_template_directory()) );
+new WPUpdatesThemeUpdater( 'http://wp-updates.com/api/1/theme', 733, basename(get_template_directory()) );
 
 /**
  * define our video width and height from theme options panel
@@ -130,3 +130,9 @@ require( get_template_directory() . '/lib/trim-menus.php' );
 */
 require( get_template_directory() . '/lib/ajax-archives.php' );
 
+/**
+ * Create Archives and Category Index page on theme activate
+ *
+*/
+
+require( get_template_directory() . '/lib/create-pages.php' );

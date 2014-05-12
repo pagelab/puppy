@@ -14,14 +14,7 @@ function kibble_add_rewrite_rules( $wp_rewrite ) {
 
   	);
 
-    	$new_non_wp_rules = array(
-        	'css/(.*)'    => 'wp-content/themes/puppy/css/$1',
-        	'js/(.*)'     => 'wp-content/themes/puppy/js/$1',
-        	'images/(.*)' => 'wp-content/themes/puppy/images/$1'
-    	);
-
     	$wp_rewrite->rules = $new_rules + $wp_rewrite->rules; 
-    	$wp_rewrite->non_wp_rules = array_merge($wp_rewrite->non_wp_rules, $new_non_wp_rules);
 }
 
 add_action('generate_rewrite_rules', 'kibble_add_rewrite_rules'); 
@@ -67,19 +60,4 @@ function change_search_url_rewrite() {
 
 add_action( 'template_redirect', 'change_search_url_rewrite' );
 
-/**
- * Change the vars which store the urls being used for css/js/images
- *
-*/
-
-function puppy_clean_urls($content) {
-        return str_replace('/wp-content/themes/puppy', '', $content);
-}
-
-if (!is_admin()) {
-	$tags = array('bloginfo', 'stylesheet_directory_uri', 'template_directory_uri', 'script_loader_src', 'style_loader_src');
-        foreach($tags as $tag) {
-        	add_filter($tag, 'puppy_clean_urls');
-        }
-}
 
