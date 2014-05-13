@@ -8,7 +8,7 @@
 function kibble_custom_thumbnail_html( $html, $post_id, $post_image_id ) {
 	$title = get_the_title($post_id);
 	if (empty( $html )) {
-		$html = '<img width="180" title="'. $title .'" height="240" src="http://baconpics.com/wp-content/uploads/2010/03/Bacon-164x204.jpg" class="thumbnail img-responsive" />';
+		$html = '<img width="180" title="'. $title .'" height="240" src="http://fakeimg.pl/164x204/282828/eae0d0/" class="thumbnail img-responsive" />';
 	}
 	$html = preg_replace(array('/(alt|title)=\"[^"]*"\s/','/class=\"[^"]*"\s/', '/width=\"[^"]*"\s/','/height=\"[^"]*"\s/'),array('title="'. $title .'" ','class="thumbnail img-responsive" ','width="180" ', 'height="240" '),trim($html));
     	return $html;
