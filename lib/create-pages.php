@@ -1,8 +1,11 @@
 <?php
 
-add_action( 'after_setup_theme', 'kibble_theme_init' );
+/**
+ * Add archive and category index pages
+ *
+*/
 
-function kibble_theme_init(){
+function kibble_create_pages(){
 
 	$pages = array('channels', 'archives');
 
@@ -24,3 +27,11 @@ function kibble_theme_init(){
 		}
 	}
 }
+
+/**
+ * Fire on theme setup
+ *
+*/
+
+add_action( 'after_setup_theme', 'kibble_create_pages' );
+

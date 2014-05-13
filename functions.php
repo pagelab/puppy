@@ -136,3 +136,10 @@ require( get_template_directory() . '/lib/ajax-archives.php' );
 */
 
 require( get_template_directory() . '/lib/create-pages.php' );
+
+/**
+ * Create Menu automatically populated with pages, and category children
+ *
+*/
+
+require( get_template_directory() . '/lib/create-menu.php' );

@@ -156,8 +156,6 @@ class Custom_Options {
 					$(this).parent().css("background", "none").css("color", "inherit").css("fontWeight", "normal");
 			});
 			
-			if ($.browser.mozilla) 
-			         $("form").attr("autocomplete", "off");
 			         
 		});
 		
