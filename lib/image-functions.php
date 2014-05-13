@@ -17,69 +17,96 @@ function kibble_custom_thumbnail_html( $html, $post_id, $post_image_id ) {
 add_filter( 'post_thumbnail_html', 'kibble_custom_thumbnail_html', 10, 3 );
 
 /**
- * Remove built in gallery shortcode
- *
-*/
-remove_shortcode('gallery');
-
-
-/**
- * Add our own gallery shortcode 
+ * Alter the markup for the gallery shortcode
  *
 */
 
-function kibble_gallery_shortcode($attr) {
+function kibble_gallery_shortcode( $content, $attr ) {
 
-	$post = get_post();
+    global $instance, $post;
+    $instance++;
 
-	static $instance = 0;
-	$instance++;
+    if ( isset( $attr['orderby'] ) ) {
+        $attr['orderby'] = sanitize_sql_orderby( $attr['orderby'] );
+        if ( ! $attr['orderby'] )
+            unset( $attr['orderby'] );
+    }
 
-	if ( ! empty( $attr['ids'] ) ) {
-		if ( empty( $attr['orderby'] ) )
-			$attr['orderby'] = 'post__in';
-		$attr['include'] = $attr['ids'];
-	}
+    extract( shortcode_atts( array(
+        'order'            =>    'ASC',
+        'orderby'        =>    'menu_order ID',
+        'id'            =>    $post->ID,
+        'itemtag'        =>    'figure',
+        'icontag'        =>    'div',
+        'captiontag'    =>    'figcaption',
+        'columns'        =>    3,
+        'size'            =>    'thumbnail',
+        'include'        =>    '',
+        'exclude'        =>    ''
+    ), $attr ) );
 
-	$output = apply_filters('post_gallery', '', $attr);
-	if ( $output != '' )
-		return $output;
+    $id = intval( $id );
 
-	if ( isset( $attr['orderby'] ) ) {
-		$attr['orderby'] = sanitize_sql_orderby( $attr['orderby'] );
-		if ( !$attr['orderby'] )
-			unset( $attr['orderby'] );
-	}
+    if ( 'RAND' == $order ) {
+        $orderby = 'none';
+    }
 
-	extract(shortcode_atts(array(
-		'order'      => 'ASC',
-		'orderby'    => 'menu_order ID',
-		'id'         => $post ? $post->ID : 0,
-		'columns'    => 3,
-		'size'       => 'thumbnail',
-		'include'    => '',
-		'exclude'    => ''
-	), $attr, 'gallery'));
+    if ( $include ) {
+        
+        $include = preg_replace( '/[^0-9,]+/', '', $include );
+        
+        $_attachments = get_posts( array(
+            'include'            =>    $include,
+            'post_status'        =>    'inherit',
+            'post_type'            =>    'attachment',
+            'post_mime_type'    =>    'image',
+            'order'                =>    $order,
+            'orderby'            =>    $orderby
+        ) );
 
-	$id = intval($id);
-	if ( 'RAND' == $order )
-		$orderby = 'none';
+        $attachments = array();
+        
+        foreach ( $_attachments as $key => $val ) {
+            $attachments[$val->ID] = $_attachments[$key];
+        }
 
-	if ( !empty($include) ) {
-		$_attachments = get_posts( array('include' => $include, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
+    } elseif ( $exclude ) {
+        
+        $exclude = preg_replace( '/[^0-9,]+/', '', $exclude );
+        
+        $attachments = get_children( array(
+            'post_parent'        =>    $id,
+            'exclude'            =>    $exclude,
+            'post_status'        =>    'inherit',
+            'post_type'            =>    'attachment',
+            'post_mime_type'    =>    'image',
+            'order'                =>    $order,
+            'orderby'            =>    $orderby
+        ) );
 
-		$attachments = array();
-		foreach ( $_attachments as $key => $val ) {
-			$attachments[$val->ID] = $_attachments[$key];
-		}
-	} elseif ( !empty($exclude) ) {
-		$attachments = get_children( array('post_parent' => $id, 'exclude' => $exclude, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
-	} else {
-		$attachments = get_children( array('post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
-	}
+    } else {
 
-	if ( empty($attachments) )
-		return '';
+        $attachments = get_children( array(
+            'post_parent'        =>    $id,
+            'post_status'        =>    'inherit',
+            'post_type'            =>    'attachment',
+            'post_mime_type'    =>    'image',
+            'order'                =>    $order,
+            'orderby'            =>    $orderby
+        ) );
+
+    }
+
+    if ( empty( $attachments ) ) {
+        return;
+    }
+
+    if ( is_feed() ) {
+        $output = "\n";
+        foreach ( $attachments as $att_id => $attachment )
+            $output .= wp_get_attachment_link( $att_id, $size, true ) . "\n";
+        return $output;
+    }
 
 	$gallery_style = $gallery_div = '<div class="col-md-12">';
 	$gallery_div = '<ul class="grid-view">' . "\n";
@@ -103,13 +130,11 @@ function kibble_gallery_shortcode($attr) {
 	$output .= "</div>" . "\n";
 	return $output;
 
-
 }
 
 /**
- * Add gallery shortcode overwriting the built in one
+ * Override the gallery shortcode markup
  *
 */
 
-add_shortcode('gallery', 'kibble_gallery_shortcode');
-
+add_filter('post_gallery', 'kibble_gallery_shortcode', 10,2);
