@@ -25,7 +25,7 @@
 
 <body>
 
-<?php include(get_stylesheet_directory() . '/lib/menu-top.php');?>
+<?php include(get_template_directory() . '/lib/menu-top.php');?>
 
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<h2 class="page-header text-center"><strong><a href="<?php echo site_url();?>/"><?php bloginfo('name');?></a></strong></h2>
